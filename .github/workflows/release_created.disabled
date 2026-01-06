@@ -1,0 +1,42 @@
+## This workflow is DISABLED.
+## To enable, rename from .disabled to .yaml and replace any references as per the comments.
+name: Github Release Created
+
+on:
+  release:
+    types: ["published"] # Inherits all input defaults
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-main:
+    name: Deploy changes to main in nonprod AWS Account
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    strategy:
+      max-parallel: 1
+      matrix:
+        component: [component1, component2] ## Replace with correct components
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+
+      - name: Updating Main Environment
+        env:
+          APP_PEM_FILE: ${{ secrets.APP_PEM_FILE }}
+          APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
+        run: |
+          bash .github/scripts/dispatch_internal_repo_workflow.sh \
+            --releaseVersion "${{ github.event.release.tag_name }}" \
+            --targetWorkflow "dispatch-deploy-static-notify-bounded-context-env.yaml" ## Replace with correct targetWorkflow \
+            --targetEnvironment "main" \
+            --targetAccountGroup "nhs-notify-bounded-context-nonprod" ## Replace with correct targetAccountGroup \
+            --targetComponent "${{ matrix.component }}" \
+            --terraformAction "apply"
