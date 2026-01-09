@@ -46,7 +46,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        component: [acct, app]
+        component: [callbacks]
 
     steps:
       - name: Checkout repository
@@ -59,8 +59,8 @@ jobs:
         run: |
           bash .github/scripts/dispatch_internal_repo_workflow.sh \
             --releaseVersion "main" \
-            --targetWorkflow "dispatch-deploy-static-notify-bounded-context-env.yaml" ## Replace with correct targetWorkflow \
+            --targetWorkflow "dispatch-deploy-static-notify-client-callbacks-env.yaml" \
             --targetEnvironment "main" \
-            --targetAccountGroup "nhs-notify-bounded-context-dev" ## Replace with correct targetAccountGroup \
+            --targetAccountGroup "nhs-notify-client-callbacks-dev" \
             --targetComponent "${{ matrix.component }}" \
             --terraformAction "apply"

@@ -38,13 +38,19 @@ variable "group" {
 variable "component" {
   type        = string
   description = "The variable encapsulating the name of this component"
-  default     = "examplecomponent"
+  default     = "callbacks"
 }
 
 variable "default_tags" {
   type        = map(string)
   description = "A map of default tags to apply to all taggable resources within the component"
   default     = {}
+}
+
+variable "parent_acct_environment" {
+  type        = string
+  description = "Name of the environment responsible for the acct resources used, affects things like DNS zone. Useful for named dev environments"
+  default     = "main"
 }
 
 ##
@@ -57,8 +63,41 @@ variable "log_retention_in_days" {
   default     = 0
 }
 
+variable "kms_deletion_window" {
+  type        = string
+  description = "When a kms key is deleted, how long should it wait in the pending deletion state?"
+  default     = "30"
+}
+
+variable "log_level" {
+  type        = string
+  description = "The log level to be used in lambda functions within the component. Any log with a lower severity than the configured value will not be logged: https://docs.python.org/3/library/logging.html#levels"
+  default     = "INFO"
+}
+
 variable "force_lambda_code_deploy" {
   type        = bool
   description = "If the lambda package in s3 has the same commit id tag as the terraform build branch, the lambda will not update automatically. Set to True if making changes to Lambda code from on the same commit for example during development"
   default     = false
+}
+
+variable "pipe_event_patterns" {
+  type  = list(string)
+  description = "value"
+  default = []
+}
+
+variable "clients" {
+  type = list(object({
+    connection_name = string
+    destination_name = string
+    invocation_endpoint = string
+    invocation_rate_limit_per_second = optional(number, 10)
+    http_method = string
+    header_name = string
+    header_value = string
+  }))
+
+  default = []
+  
 }
