@@ -13,7 +13,7 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS Account ID (numeric) | `string` | n/a | yes |
-| <a name="input_clients"></a> [clients](#input\_clients) | n/a | <pre>list(object({<br/>    connection_name                  = string<br/>    destination_name                 = string<br/>    invocation_endpoint              = string<br/>    invocation_rate_limit_per_second = optional(number, 10)<br/>    http_method                      = string<br/>    header_name                      = string<br/>    header_value                     = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_clients"></a> [clients](#input\_clients) | n/a | <pre>list(object({<br/>    connection_name                  = string<br/>    destination_name                 = string<br/>    invocation_endpoint              = string<br/>    invocation_rate_limit_per_second = optional(number, 10)<br/>    http_method                      = optional(string, "POST")<br/>    header_name                      = optional(string, "x-api-key")<br/>    header_value                     = string<br/>    client_detail                    = list(string)<br/>  }))</pre> | `[]` | no |
 | <a name="input_component"></a> [component](#input\_component) | The variable encapsulating the name of this component | `string` | `"callbacks"` | no |
 | <a name="input_default_tags"></a> [default\_tags](#input\_default\_tags) | A map of default tags to apply to all taggable resources within the component | `map(string)` | `{}` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The name of the tfscaffold environment | `string` | n/a | yes |
@@ -35,7 +35,6 @@
 | <a name="module_client_destination"></a> [client\_destination](#module\_client\_destination) | ../../modules/client-destination | n/a |
 | <a name="module_client_transform_filter_lambda"></a> [client\_transform\_filter\_lambda](#module\_client\_transform\_filter\_lambda) | git::https://github.com/NHSDigital/nhs-notify-shared-modules.git//infrastructure/modules/lambda | v2.0.29 |
 | <a name="module_kms"></a> [kms](#module\_kms) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-kms.zip | n/a |
-| <a name="module_main_pipe_dlq"></a> [main\_pipe\_dlq](#module\_main\_pipe\_dlq) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-sqs.zip | n/a |
 | <a name="module_sqs_inbound_event"></a> [sqs\_inbound\_event](#module\_sqs\_inbound\_event) | https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.29/terraform-sqs.zip | n/a |
 ## Outputs
 

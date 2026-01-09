@@ -16,20 +16,19 @@ resource "aws_pipes_pipe" "main" {
       batch_size                         = var.pipe_sqs_input_batch_size
       maximum_batching_window_in_seconds = var.pipe_sqs_max_batch_window
     }
-
-    filter_criteria {
-      filter {
-        pattern = jsonencode({
-          "body":{"type":["NEW"]}
-        })
-      }
-    }
   }
 
       target_parameters {
       eventbridge_event_bus_parameters {
 
       }
+
+      input_template = <<EOF
+{
+  "dataschemaversion": <$.body.dataschemaversion>,
+  "type": <$.body.type>
+}
+EOF
     }
 
   depends_on = [aws_iam_role_policy_attachment.main_pipe]

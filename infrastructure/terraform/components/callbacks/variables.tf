@@ -93,9 +93,10 @@ variable "clients" {
     destination_name                 = string
     invocation_endpoint              = string
     invocation_rate_limit_per_second = optional(number, 10)
-    http_method                      = string
-    header_name                      = string
+    http_method                      = optional(string, "POST")
+    header_name                      = optional(string, "x-api-key")
     header_value                     = string
+    client_detail                    = list(string)
   }))
 
   default = []

@@ -13,6 +13,16 @@ variable "component" {
   description = "Component name"
 }
 
+variable "aws_account_id" {
+  type        = string
+  description = "Account ID"
+}
+
+variable "region" {
+  type        = string
+  description = "AWS Region"
+}
+
 variable "connection_name" {
   type        = string
   description = "Connection name"
@@ -46,4 +56,19 @@ variable "invocation_rate_limit_per_second" {
 variable "http_method" {
   type        = string
   description = "HTTP Method"
+}
+
+variable "client_detail" {
+  type        = list(string)
+  description = "Client Event Detail"
+}
+
+variable "client_bus_name" {
+  type        = string
+  description = "EventBus name where you create the rule"
+}
+
+variable "kms_key_arn" {
+  type        = string
+  description = "KMS Key ARN"
 }

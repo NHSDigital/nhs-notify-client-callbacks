@@ -71,17 +71,4 @@ data "aws_iam_policy_document" "main_pipe" {
       module.client_transform_filter_lambda.function_arn
     ]
   }
-
-  statement {
-    sid    = "AllowDlqAccess"
-    effect = "Allow"
-
-    actions = [
-      "sqs:SendMessage"
-    ]
-
-    resources = [
-      module.main_pipe_dlq.sqs_queue_arn
-    ]
-  }
 }

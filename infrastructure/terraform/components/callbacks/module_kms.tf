@@ -71,7 +71,7 @@ data "aws_iam_policy_document" "kms" {
       variable = "kms:EncryptionContext:aws:sqs:arn"
       values = [
         "arn:aws:sqs:${var.region}:${var.aws_account_id}:${var.project}-${var.environment}-callbacks-inbound-event-queue",
-        "arn:aws:sqs:${var.region}:${var.aws_account_id}:${var.project}-${var.environment}-callbacks-inbound-event-dlq",
+        "arn:aws:sqs:${var.region}:${var.aws_account_id}:${var.project}-${var.environment}-callbacks-*-dlq" #wildcard here so that DLQs for clients can also use this key
       ]
     }
   }
