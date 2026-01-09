@@ -9,41 +9,41 @@ variable "environment" {
 }
 
 variable "component" {
-  type = string
+  type        = string
   description = "Component name"
 }
 
 variable "connection_name" {
-   type = string
+  type        = string
   description = "Connection name"
 }
 
 variable "header_name" {
-  type = string
+  type        = string
   description = "Header name"
 }
 
 variable "header_value" {
-  type = string
+  type        = string
   description = "Header value"
 }
 
 variable "destination_name" {
-  type = string
+  type        = string
   description = "Destination Name"
 }
 
 variable "invocation_endpoint" {
-  type = string
+  type        = string
   description = "Invocation Endpoint"
 }
 
 variable "invocation_rate_limit_per_second" {
-  type = string
+  type        = string
   description = "Invocation Rate Limit Per Second"
 }
 
 variable "http_method" {
-  type = string
+  type        = string
   description = "HTTP Method"
 }

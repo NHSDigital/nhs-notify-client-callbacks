@@ -82,22 +82,22 @@ variable "force_lambda_code_deploy" {
 }
 
 variable "pipe_event_patterns" {
-  type  = list(string)
+  type        = list(string)
   description = "value"
-  default = []
+  default     = []
 }
 
 variable "clients" {
   type = list(object({
-    connection_name = string
-    destination_name = string
-    invocation_endpoint = string
+    connection_name                  = string
+    destination_name                 = string
+    invocation_endpoint              = string
     invocation_rate_limit_per_second = optional(number, 10)
-    http_method = string
-    header_name = string
-    header_value = string
+    http_method                      = string
+    header_name                      = string
+    header_value                     = string
   }))
 
   default = []
-  
+
 }

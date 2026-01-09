@@ -18,9 +18,9 @@ data "aws_iam_policy_document" "main_pipe" {
 
     actions = [
       "sqs:ReceiveMessage",
-    "sqs:DeleteMessage",
-    "sqs:GetQueueAttributes",
-    "sqs:ChangeMessageVisibility"
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:ChangeMessageVisibility"
     ]
 
     resources = [
