@@ -150,7 +150,7 @@ jobs:
     secrets: inherit
   pr-create-dynamic-environment:
     name: Create Dynamic Environment
-    needs: [metadata, dependencies, commit-stage]
+    needs: [metadata, commit-stage]
     runs-on: ubuntu-latest
     if: needs.metadata.outputs.does_pull_request_exist == 'true' && github.ref != 'refs/heads/main'
     steps:
