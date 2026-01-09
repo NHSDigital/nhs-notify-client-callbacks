@@ -12,24 +12,25 @@ resource "aws_pipes_pipe" "main" {
     }
   }
   source_parameters {
-    dynamodb_stream_parameters {
-      starting_position                  = "LATEST"
-      maximum_record_age_in_seconds      = -1
-      maximum_retry_attempts             = 3
-      maximum_batching_window_in_seconds = 5
-      dead_letter_config {
-        arn = module.main_pipe_dlq.sqs_queue_arn
-      }
+    sqs_queue_parameters {
+      batch_size                         = var.pipe_sqs_input_batch_size
+      maximum_batching_window_in_seconds = var.pipe_sqs_max_batch_window
     }
+
     filter_criteria {
-      dynamic "filter" {
-        for_each = var.pipe_event_patterns
-        content {
-          pattern = filter.value
-        }
+      filter {
+        pattern = jsonencode({
+          "body":{"type":["NEW"]}
+        })
       }
     }
   }
+
+      target_parameters {
+      eventbridge_event_bus_parameters {
+
+      }
+    }
 
   depends_on = [aws_iam_role_policy_attachment.main_pipe]
 }
