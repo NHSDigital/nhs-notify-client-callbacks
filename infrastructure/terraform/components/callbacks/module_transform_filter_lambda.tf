@@ -31,6 +31,9 @@ module "client_transform_filter_lambda" {
   force_lambda_code_deploy = var.force_lambda_code_deploy
   enable_lambda_insights   = false
 
+  log_destination_arn       = local.log_destination_arn
+  log_subscription_role_arn = local.acct.log_subscription_role_arn
+
   lambda_env_vars = {
   }
 }
