@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6
       - name: Trigger dynamic environment destroy
         env:
           APP_PEM_FILE: ${{ secrets.APP_PEM_FILE }}
