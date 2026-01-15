@@ -18,11 +18,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger nhs-notify-internal dynamic environment destruction
-        shell: bash
+      - uses: actions/checkout@v5.0.0
+      - name: Trigger dynamic environment destroy
         env:
           APP_PEM_FILE: ${{ secrets.APP_PEM_FILE }}
           APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
+        shell: bash
         run: |
           .github/scripts/dispatch_internal_repo_workflow.sh \
             --infraRepoName "$(echo ${{ github.repository }} | cut -d'/' -f2)" \
