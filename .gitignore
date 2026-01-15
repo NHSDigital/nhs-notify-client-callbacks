@@ -22,3 +22,11 @@ node_modules
 dist
 .DS_Store
 .reports
+
+# spec-kit
+.github/agents
+.github/prompts
+
+# VSCode Cache
+.vscode
+!.vscode/settings.json
