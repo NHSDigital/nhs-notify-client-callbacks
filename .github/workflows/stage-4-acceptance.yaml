@@ -31,10 +31,6 @@ on:
         description: "Version of the software, set by the CI/CD pipeline workflow"
         required: true
         type: string
-      target_environment:
-        description: "Environment to run acceptance tests with"
-        required: true
-        type: string
 
 jobs:
   environment-set-up:
