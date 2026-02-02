@@ -1,0 +1,22 @@
+{
+    "name": "replay-from-dlq",
+    "version": "0.0.1",
+    "description": "CLI tool for replaying failed callback deliveries from per-client DLQs",
+    "private": true,
+    "type": "module",
+    "main": "dist/replay-from-dlq-cli.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "tsx src/replay-from-dlq-cli.ts",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@tsconfig/node22": "^22.0.2",
+        "@types/node": "^22.0.0",
+        "tsx": "^4.19.3",
+        "typescript": "^5.8.2"
+    }
+}

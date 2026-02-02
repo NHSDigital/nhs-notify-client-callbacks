@@ -1,0 +1,4 @@
+packages:
+  - "lambdas/client-transform-filter-lambda"
+  - "scripts/deploy-client-subscriptions"
+  - "scripts/replay-from-dlq"

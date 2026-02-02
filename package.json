@@ -39,14 +39,11 @@
     "react": "^19.0.0"
   },
   "scripts": {
-    "generate-dependencies": "npm run generate-dependencies --workspaces --if-present",
-    "lint": "npm run lint --workspaces",
-    "lint:fix": "npm run lint:fix --workspaces",
-    "start": "npm run start --workspace frontend",
-    "test:unit": "npm run test:unit --workspaces",
-    "typecheck": "npm run typecheck --workspaces"
-  },
-  "workspaces": [
-    "lambdas/client-transform-filter-lambda"
-  ]
+    "generate-dependencies": "pnpm run --recursive --if-present generate-dependencies",
+    "lint": "pnpm run --recursive lint",
+    "lint:fix": "pnpm run --recursive lint:fix",
+    "start": "pnpm run --filter frontend start",
+    "test:unit": "pnpm run --recursive test:unit",
+    "typecheck": "pnpm run --recursive typecheck"
+  }
 }

@@ -13,7 +13,7 @@ version.json
 # Please, add your custom content below!
 
 # dependencies
-node_modules
+**/node_modules
 .node-version
 */node_modules
 /.pnp

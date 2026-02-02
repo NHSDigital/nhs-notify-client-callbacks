@@ -1,0 +1,22 @@
+{
+    "name": "deploy-client-subscriptions",
+    "version": "0.0.1",
+    "description": "CLI tool for deploying client subscription configurations to S3",
+    "private": true,
+    "type": "module",
+    "main": "dist/deploy-client-subscriptions-cli.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "tsx src/deploy-client-subscriptions-cli.ts",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@tsconfig/node22": "^22.0.2",
+        "@types/node": "^22.0.0",
+        "tsx": "^4.19.3",
+        "typescript": "^5.8.2"
+    }
+}
