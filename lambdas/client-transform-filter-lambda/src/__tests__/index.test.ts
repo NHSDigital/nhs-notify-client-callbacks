@@ -1,21 +1,20 @@
-import { handler } from "../index";
+import { handler } from "..";
 
 describe("Lambda handler", () => {
-
   it("extracts from a stringified event", async () => {
     const eventStr = JSON.stringify({
       body: {
         dataschemaversion: "1.0",
-        type: "uk.nhs.notify.client-callbacks.test-sid"
-      }
+        type: "uk.nhs.notify.client-callbacks.test-sid",
+      },
     });
 
     const result = await handler(eventStr);
     expect(result).toEqual({
       body: {
         dataschemaversion: "1.0",
-        type: "uk.nhs.notify.client-callbacks.test-sid"
-      }
+        type: "uk.nhs.notify.client-callbacks.test-sid",
+      },
     });
   });
 
@@ -26,18 +25,18 @@ describe("Lambda handler", () => {
         body: JSON.stringify({
           body: {
             dataschemaversion: "1.0",
-            type: "uk.nhs.notify.client-callbacks.test-sid"
-          }
-        })
-      }
+            type: "uk.nhs.notify.client-callbacks.test-sid",
+          },
+        }),
+      },
     ];
 
     const result = await handler(eventArray);
     expect(result).toEqual({
       body: {
         dataschemaversion: "1.0",
-        type: "uk.nhs.notify.client-callbacks.test-sid"
-      }
+        type: "uk.nhs.notify.client-callbacks.test-sid",
+      },
     });
   });
 
@@ -54,19 +53,19 @@ describe("Lambda handler", () => {
           body: JSON.stringify({
             body: {
               dataschemaversion: "2.0",
-              type: "nested-type"
-            }
-          })
-        }
-      }
+              type: "nested-type",
+            },
+          }),
+        },
+      },
     };
 
     const result = await handler(event);
     expect(result).toEqual({
       body: {
         dataschemaversion: "2.0",
-        type: "nested-type"
-      }
+        type: "nested-type",
+      },
     });
   });
 
@@ -75,5 +74,4 @@ describe("Lambda handler", () => {
     const result = await handler(eventStr);
     expect(result).toEqual({ body: {} });
   });
-
 });
