@@ -1,5 +1,4 @@
 {
-  "//": "PLEASE UPDATE THE NAME AND WORKSPACES APPROPRIATELY.",
   "devDependencies": {
     "@stylistic/eslint-plugin": "^3.1.0",
     "@tsconfig/node22": "^22.0.2",
@@ -32,7 +31,7 @@
     "tsx": "^4.19.3",
     "typescript-eslint": "^8.54.0"
   },
-  "name": "nhs-notify-repository-template",
+  "name": "nhs-notify-client-callbacks",
   "overrides": {
     "pretty-format": {
       "react-is": "19.0.0"
