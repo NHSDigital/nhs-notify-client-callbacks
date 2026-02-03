@@ -12,13 +12,49 @@ version.json
 
 # Please, add your custom content below!
 
-# dependencies
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Dependencies
 node_modules
 .node-version
-*/node_modules
 /.pnp
 .pnp.js
-/build
+
+# Build outputs
+build
 dist
+
+# Test coverage and results
+coverage
+.nyc_output
+*.lcov
+junit.xml
+test-results
+
+# TypeScript
+*.tsbuildinfo
+
+# Caches
+.eslintcache
+.npm
+.cache
+
+# Environment files
+.env
+.env*.local
+
+# OS files
 .DS_Store
+*.swp
+*~
+Thumbs.db
+
+# Reports
 .reports
