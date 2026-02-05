@@ -11,5 +11,3 @@
  */
 
 console.log("replay-from-dlq CLI");
-console.log("TODO: Implement in Phase 6 (User Story 4)");
-console.log("See tasks.md T068-T074 for implementation details");

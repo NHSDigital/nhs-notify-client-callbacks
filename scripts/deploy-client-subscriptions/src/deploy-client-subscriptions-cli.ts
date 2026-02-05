@@ -10,5 +10,3 @@
  */
 
 console.log("deploy-client-subscriptions CLI");
-console.log("TODO: Implement in Phase 2 (User Story 2)");
-console.log("See tasks.md T050-T053 for implementation details");

@@ -1,7 +1,5 @@
 # Deploy Client Subscriptions CLI
 
-**Status**: Placeholder for Phase 2 (User Story 2) - Tasks T050-T053
-
 ## Purpose
 
 This tool will validate client subscription configurations against the JSON schema and upload them to the S3 Client Config bucket.

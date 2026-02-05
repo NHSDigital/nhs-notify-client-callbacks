@@ -1,7 +1,5 @@
 # Replay from DLQ CLI
 
-**Status**: Placeholder for Phase 6 (User Story 4) - Tasks T068-T074
-
 ## Purpose
 
 This tool will read messages from a client's DLQ and republish them to the Callback Event Queue for reprocessing.
