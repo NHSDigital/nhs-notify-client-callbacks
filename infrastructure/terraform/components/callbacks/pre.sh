@@ -2,8 +2,8 @@
 # # It ensures all Node.js dependencies are installed, generates any required dependencies,
 # # and builds all Lambda functions in the workspace before Terraform provisions infrastructure.
 
-npm ci
+pnpm install --frozen-lockfile
 
-npm run generate-dependencies --workspaces --if-present
+pnpm run generate-dependencies --if-present
 
-npm run lambda-build --workspaces --if-present
+pnpm run lambda-build
