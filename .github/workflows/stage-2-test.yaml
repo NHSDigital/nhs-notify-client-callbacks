@@ -48,12 +48,19 @@ jobs:
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
       - name: "Repo setup"
         run: |
-          npm ci
+          pnpm install --frozen-lockfile
       - name: "Generate dependencies"
         run: |
-          npm run generate-dependencies --workspaces --if-present
+          pnpm run generate-dependencies
           git diff --exit-code
   test-unit:
     name: "Unit tests"
@@ -62,12 +69,19 @@ jobs:
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
       - name: "Repo setup"
         run: |
-          npm ci
+          pnpm install --frozen-lockfile
       - name: "Generate dependencies"
         run: |
-          npm run generate-dependencies --workspaces --if-present
+          pnpm run generate-dependencies
       - name: "Run unit test suite"
         run: |
           make test-unit
@@ -90,12 +104,19 @@ jobs:
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
       - name: "Repo setup"
         run: |
-          npm ci
+          pnpm install --frozen-lockfile
       - name: "Generate dependencies"
         run: |
-          npm run generate-dependencies --workspaces --if-present
+          pnpm run generate-dependencies
       - name: "Run linting"
         run: |
           make test-lint
@@ -106,12 +127,19 @@ jobs:
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
       - name: "Repo setup"
         run: |
-          npm ci
+          pnpm install --frozen-lockfile
       - name: "Generate dependencies"
         run: |
-          npm run generate-dependencies --workspaces --if-present
+          pnpm run generate-dependencies
       - name: "Run typecheck"
         run: |
           make test-typecheck
