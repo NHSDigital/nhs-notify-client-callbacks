@@ -104,11 +104,11 @@ variable "clients" {
 }
 
 variable "pipe_sqs_input_batch_size" {
-  type = number
+  type    = number
   default = 1
 }
 
 variable "pipe_sqs_max_batch_window" {
-  type = number
+  type    = number
   default = 2
 }

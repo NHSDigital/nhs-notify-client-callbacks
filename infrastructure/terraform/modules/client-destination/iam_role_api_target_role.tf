@@ -44,32 +44,32 @@ data "aws_iam_policy_document" "api_target_role" {
   }
 
   statement {
-      sid    = replace("AllowSQSSendMessageForDLQFor${var.connection_name}", "-", "")
-      effect = "Allow"
+    sid    = replace("AllowSQSSendMessageForDLQFor${var.connection_name}", "-", "")
+    effect = "Allow"
 
-      actions = [
-        "sqs:SendMessage",
-      ]
+    actions = [
+      "sqs:SendMessage",
+    ]
 
-      resources = [
-        module.target_dlq.sqs_queue_arn,
-      ]
-    }
+    resources = [
+      module.target_dlq.sqs_queue_arn,
+    ]
+  }
 
   statement {
-      sid    = replace("AllowKMSForDLQFor${var.connection_name}", "-", "")
-      effect = "Allow"
+    sid    = replace("AllowKMSForDLQFor${var.connection_name}", "-", "")
+    effect = "Allow"
 
-      actions = [
-        "kms:ReEncrypt*",
-        "kms:GenerateDataKey*",
-        "kms:Encrypt",
-        "kms:DescribeKey",
-        "kms:Decrypt"
-      ]
+    actions = [
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:Encrypt",
+      "kms:DescribeKey",
+      "kms:Decrypt"
+    ]
 
-      resources = [
-        var.kms_key_arn,
-      ]
-    }
+    resources = [
+      var.kms_key_arn,
+    ]
   }
+}
