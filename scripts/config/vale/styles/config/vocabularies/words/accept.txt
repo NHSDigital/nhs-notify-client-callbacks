@@ -1,9 +1,9 @@
-[A-Z]+s
 ajv
+[A-Z]+s
 Bitwarden
 bot
-Cognito
 [Cc]onfig
+Cognito
 Cyber
 Dependabot
 dev
