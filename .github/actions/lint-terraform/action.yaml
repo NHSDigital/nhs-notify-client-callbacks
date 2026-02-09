@@ -7,6 +7,11 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: "Install Terraform binary"
+      shell: bash
+      run: |
+        asdf plugin add terraform || true
+        asdf install terraform || true
     - name: "Check Terraform format"
       shell: bash
       run: |
