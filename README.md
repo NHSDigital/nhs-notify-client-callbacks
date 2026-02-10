@@ -1,6 +1,6 @@
 # NHS Notify Client Callbacks
 
-Event-driven infrastructure for delivering NHS Notify callback notifications to client webhook endpoints. This repository implements the Callbacks domain as part of the NHS Notify distributed architecture, receiving events from the Shared Event Bus and orchestrating webhook delivery via EventBridge API Destinations.
+Event-driven infrastructure for delivering NHS Notify callback notifications to client webhook endpoints. This repository implements the Client Callbacks domain as part of the NHS Notify distributed architecture, receiving events from the Shared Event Bus and orchestrating webhook delivery via EventBridge API Destinations.
 
 ## Overview
 
