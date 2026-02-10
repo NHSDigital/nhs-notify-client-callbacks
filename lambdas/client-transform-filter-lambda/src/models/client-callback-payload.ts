@@ -1,0 +1,55 @@
+/**
+ * JSON:API-compliant callback payload delivered to client webhooks.
+ * Operational fields are excluded from all callback payloads.
+ */
+
+import type {
+  Channel,
+  ChannelStatus,
+  MessageStatus,
+  SupplierStatus,
+} from "models/callback-event";
+import type { RoutingPlan } from "models/message-status-data";
+
+export interface ClientCallbackPayload {
+  data: CallbackItem[];
+}
+
+export interface CallbackItem {
+  type: "MessageStatus" | "ChannelStatus";
+  attributes: MessageStatusAttributes | ChannelStatusAttributes;
+  links: {
+    message: string;
+  };
+  meta: {
+    idempotencyKey: string;
+  };
+}
+
+export interface MessageStatusAttributes {
+  messageId: string;
+  messageReference: string;
+  messageStatus: MessageStatus;
+  messageStatusDescription?: string;
+  messageFailureReasonCode?: string;
+  channels: {
+    type: Channel;
+    channelStatus: "delivered" | "failed";
+  }[];
+  timestamp: string;
+  routingPlan: RoutingPlan;
+}
+
+export interface ChannelStatusAttributes {
+  messageId: string;
+  messageReference: string;
+  cascadeType: "primary" | "secondary";
+  cascadeOrder: number;
+  channel: Channel;
+  channelStatus: ChannelStatus;
+  channelStatusDescription?: string;
+  channelFailureReasonCode?: string;
+  supplierStatus: SupplierStatus;
+  timestamp: string;
+  retryCount: number;
+}

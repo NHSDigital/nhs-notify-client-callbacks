@@ -52,4 +52,17 @@ data "aws_iam_policy_document" "example_lambda" {
       module.kms.key_arn, ## Requires shared kms module
     ]
   }
+
+  statement {
+    sid    = "S3ClientConfigReadAccess"
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.client_config.arn}/*",
+    ]
+  }
 }
