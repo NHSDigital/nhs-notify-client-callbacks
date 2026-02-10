@@ -5,10 +5,10 @@ include scripts/init.mk
 
 # ==============================================================================
 
-# Example CI/CD targets are: dependencies, build, publish, deploy, clean, etc.
+# Example CI/CD targets are: dependencies, build, clean, etc.
 
 dependencies: # Install dependencies needed to build and test the project @Pipeline
-	# TODO: Implement installation of your project dependencies
+	npm ci
 
 build: # Build the project artefact @Pipeline
 	(cd docs && make build)
@@ -20,8 +20,13 @@ deploy: # Deploy the project artefact to the target environment @Pipeline
 	# TODO: Implement the artefact deployment step
 
 clean:: # Clean-up project resources (main) @Operations
-	rm -f .version
-	# TODO: Implement project resources clean-up step
+	rm -f .version version.json
+	rm -rf node_modules
+	rm -rf lambdas/*/dist
+	rm -rf lambdas/*/node_modules
+	rm -rf coverage
+	rm -rf lambdas/*/coverage
+	(cd docs && make clean 2>/dev/null || true)
 
 config:: _install-dependencies version # Configure development environment (main) @Configuration
 	(cd docs && make install)

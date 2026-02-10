@@ -1,61 +1,79 @@
-# NHS Notify Repository Template
+# NHS Notify Client Callbacks
 
-[![CI/CD Pull Request](https://github.com/nhs-england-tools/repository-template/actions/workflows/cicd-1-pull-request.yaml/badge.svg)](https://github.com/nhs-england-tools/repository-template/actions/workflows/cicd-1-pull-request.yaml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=repository-template&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=repository-template)
+Event-driven infrastructure for delivering NHS Notify callback notifications to client webhook endpoints. This repository implements the Client Callbacks domain as part of the NHS Notify distributed architecture, receiving events from the Shared Event Bus and orchestrating webhook delivery via EventBridge API Destinations.
 
-Start with an overview or a brief description of what the project is about and what it does. For example -
+## Overview
 
-Welcome to our repository template designed to streamline your project setup! This robust template provides a reliable starting point for your new projects, covering an essential tech stack and encouraging best practices in documenting.
+The Client Callbacks infrastructure processes message and channel status events, applies client-specific subscription filters, and delivers callbacks to configured webhook endpoints. Events flow from the Shared Event Bus through an SQS queue, are transformed and filtered by a Lambda function, then routed to clients via per-client API Destination Target Rules.
 
-This repository template aims to foster a user-friendly development environment by ensuring that every included file is concise and adequately self-documented. By adhering to this standard, we can promote increased clarity and maintainability throughout your project's lifecycle. Bundled within this template are resources that pave the way for seamless repository creation. Currently supported technologies are:
+### Key Features
 
-- Terraform
-- Docker
-
-Make use of this repository template to expedite your project setup and enhance your productivity right from the get-go. Enjoy the advantage of having a well-structured, self-documented project that reduces overhead and increases focus on what truly matters - coding!
-
-Any code files or example documentation that is not used in the new repository should be removed to prevent the proliferation of duplicate copies of redundant code that if not maintained could introduce vulnerabilities (e.g. via un-patched Dependabot issues).
+- **Event-Driven Architecture**: Consumes CloudEvents from the Shared Event Bus (`uk.nhs.notify.client-callbacks.*` namespace)
+- **Client Subscription Filtering**: Applies per-client rules for message status and channel status event types
+- **Webhook Delivery**: EventBridge API Destinations with per-client configuration and retry policies
+- **Failure Handling**: Per-client Dead Letter Queues
+- **Backward Compatibility**: Maintains callback payload format compatibility with legacy Core domain implementation
 
 ## Table of Contents
 
-- [NHS Notify Repository Template](#nhs-notify-repository-template)
+- [NHS Notify Client Callbacks](#nhs-notify-client-callbacks)
+  - [Overview](#overview)
+    - [Key Features](#key-features)
   - [Table of Contents](#table-of-contents)
-  - [Documentation](#documentation)
+  - [Architecture](#architecture)
+    - [Components](#components)
+    - [Event Flow](#event-flow)
   - [Setup](#setup)
     - [Prerequisites](#prerequisites)
     - [Configuration](#configuration)
   - [Usage](#usage)
     - [Testing](#testing)
-  - [Design](#design)
-    - [Diagrams](#diagrams)
-    - [Modularity](#modularity)
+  - [Infrastructure](#infrastructure)
   - [Contributing](#contributing)
   - [Contacts](#contacts)
   - [Licence](#licence)
 
-## Documentation
+## Architecture
 
-- [Built](/)
-- [Source](/docs/README.md)
+### Components
+
+- **Shared Event Bus**: Cross-domain EventBridge bus receiving events from Core, Routing, and other NHS Notify domains
+- **Callback Event Queue**: SQS queue subscribed to `uk.nhs.notify.client-callbacks.*` events via EventBridge Target Rule
+- **Transform & Filter Lambda**: Processes events, loads client configurations, applies subscription filters, and routes to Callbacks Event Bus
+- **Callbacks Event Bus**: Domain-specific EventBridge bus for webhook orchestration
+- **API Destination Target Rules**: Per-client rules invoking HTTPS endpoints with client-specific authentication
+- **Client Config Storage**: S3 bucket storing client subscription configurations (status filters, webhook endpoints)
+- **Per-Client DLQs**: SQS Dead Letter Queues for failed webhook deliveries (one per client)
+
+### Event Flow
+
+1. Status change events published to Shared Event Bus in `uk.nhs.notify.client-callbacks.*` namespace
+2. SQS Target Rule routes events to Callback Event Queue
+3. EventBridge Pipe invokes Transform & Filter Lambda with event batches
+4. Lambda loads client subscription configs from S3
+5. Lambda applies client-specific filters (message status, channel status)
+6. Matching events published to Callbacks Event Bus
+7. API Destination Target Rules deliver callbacks to client webhook endpoints
+8. Failed deliveries moved to per-client DLQs after retry exhaustion
 
 ## Setup
 
-By including preferably a one-liner or if necessary a set of clear CLI instructions we improve user experience. This should be a frictionless installation process that works on various operating systems (macOS, Linux, Windows WSL) and handles all the dependencies.
-
-Clone the repository
+Clone the repository:
 
 ```shell
-git clone https://github.com/nhs-england-tools/repository-template.git
-cd nhs-england-tools/repository-template
+git clone https://github.com/NHSDigital/nhs-notify-client-callbacks.git
+cd nhs-notify-client-callbacks
 ```
 
 ### Prerequisites
 
 The following software packages, or their equivalents, are expected to be installed and configured:
 
-- [Docker](https://www.docker.com/) container runtime or a compatible tool, e.g. [Podman](https://podman.io/),
-- [asdf](https://asdf-vm.com/) version manager,
-- [GNU make](https://www.gnu.org/software/make/) 3.82 or later,
+- [Node.js](https://nodejs.org/) 20.x or later (for Lambda development)
+- [Terraform](https://www.terraform.io/) 1.5.x or later
+- [AWS CLI](https://aws.amazon.com/cli/) configured with appropriate credentials
+- [asdf](https://asdf-vm.com/) version manager
+- [GNU make](https://www.gnu.org/software/make/) 3.82 or later
 
 > [!NOTE]<br>
 > The version of GNU make available by default on macOS is earlier than 3.82. You will need to upgrade it or certain `make` tasks will fail. On macOS, you will need [Homebrew](https://brew.sh/) installed, then to install `make`, like so:
@@ -64,20 +82,15 @@ The following software packages, or their equivalents, are expected to be instal
 > brew install make
 > ```
 >
-> You will then see instructions to fix your [`$PATH`](https://github.com/nhs-england-tools/dotfiles/blob/main/dot_path.tmpl) variable to make the newly installed version available. If you are using [dotfiles](https://github.com/nhs-england-tools/dotfiles), this is all done for you.
+> You will then see instructions to fix your [`$PATH`](https://github.com/nhs-england-tools/dotfiles/blob/main/dot_path.tmpl) variable to make the newly installed version available.
 
-- [GNU sed](https://www.gnu.org/software/sed/) and [GNU grep](https://www.gnu.org/software/grep/) are required for the scripted command-line output processing,
-- [GNU coreutils](https://www.gnu.org/software/coreutils/) and [GNU binutils](https://www.gnu.org/software/binutils/) may be required to build dependencies like Python, which may need to be compiled during installation,
-
-> [!NOTE]<br>
-> For macOS users, installation of the GNU toolchain has been scripted and automated as part of the `dotfiles` project. Please see this [script](https://github.com/nhs-england-tools/dotfiles/blob/main/assets/20-install-base-packages.macos.sh) for details.
-
-- [Python](https://www.python.org/) required to run Git hooks,
-- [`jq`](https://jqlang.github.io/jq/) a lightweight and flexible command-line JSON processor.
+- [GNU sed](https://www.gnu.org/software/sed/) and [GNU grep](https://www.gnu.org/software/grep/) are required for scripted command-line output processing
+- [Python](https://www.python.org/) required to run Git hooks
+- [`jq`](https://jqlang.github.io/jq/) a lightweight and flexible command-line JSON processor
 
 ### Configuration
 
-Installation and configuration of the toolchain dependencies
+Install and configure toolchain dependencies:
 
 ```shell
 make config
@@ -85,53 +98,61 @@ make config
 
 ## Usage
 
-After a successful installation, provide an informative example of how this project can be used. Additional code snippets, screenshots and demos work well in this space. You may also link to the other documentation resources, e.g. the [User Guide](./docs/user-guide.md) to demonstrate more use cases and to show more features.
-
 ### Testing
 
-There are `make` tasks for you to configure to run your tests.  Run `make test` to see how they work.  You should be able to use the same entry points for local development as in your CI pipeline.
+Run unit tests for Lambda functions:
 
-## Design
-
-### Diagrams
-
-The [C4 model](https://c4model.com/) is a simple and intuitive way to create software architecture diagrams that are clear, consistent, scalable and most importantly collaborative. This should result in documenting all the system interfaces, external dependencies and integration points.
-
-![Repository Template](./docs/diagrams/Repository_Template_GitHub_Generic.png)
-
-The source for diagrams should be in Git for change control and review purposes. Recommendations are [draw.io](https://app.diagrams.net/) (example above in [docs](.docs/diagrams/) folder) and [Mermaids](https://github.com/mermaid-js/mermaid). Here is an example Mermaids sequence diagram:
-
-```mermaid
-sequenceDiagram
-    User->>+Service: GET /users?params=...
-    Service->>Service: auth request
-    Service->>Database: get all users
-    Database-->>Service: list of users
-    Service->>Service: filter users
-    Service-->>-User: list[User]
+```shell
+npm test
 ```
 
-### Modularity
+## Infrastructure
 
-Most of the projects are built with customisability and extendability in mind. At a minimum, this can be achieved by implementing service level configuration options and settings. The intention of this section is to show how this can be used. If the system processes data, you could mention here for example how the input is prepared for testing - anonymised, synthetic or live data.
+Infrastructure is managed with Terraform under `infrastructure/terraform/`:
+
+- `components/`: Terraform components for different environments/accounts
+- `modules/`: Reusable Terraform modules for callback infrastructure
+
+**Deploy infrastructure**:
+
+```shell
+cd infrastructure/terraform/components/<component>
+terraform init
+terraform plan
+terraform apply
+```
+
+Key infrastructure modules:
+
+- **callback-event-queue**: SQS queue and EventBridge Target Rule for Shared Event Bus subscription
+- **transform-filter-lambda**: Lambda function with EventBridge Pipe trigger
+- **callbacks-event-bus**: Domain-specific EventBridge bus
+- **api-destinations**: Per-client API Destination Target Rules
+- **client-config-storage**: S3 bucket for subscription configurations
 
 ## Contributing
 
-Describe or link templates on how to raise an issue, feature request or make a contribution to the codebase. Reference the other documentation files, like
+Contributions should follow the NHS Notify development standards:
 
-- Environment setup for contribution, i.e. `CONTRIBUTING.md`
-- Coding standards, branching, linting, practices for development and testing
-- Release process, versioning, changelog
-- Backlog, board, roadmap, ways of working
-- High-level requirements, guiding principles, decision records, etc.
+- See [AGENTS.md](./AGENTS.md) for AI-assisted development guidelines
+- Follow existing patterns for Lambda functions and Terraform modules
+- Include tests for new functionality
+- Update documentation for infrastructure or configuration changes
+
+Key development practices:
+
+- **Branching**: Feature branches from `main` with descriptive names (e.g., `feature/CCM-XXXXX-description`)
+- **Testing**: Unit tests required for Lambda functions; integration tests for event flow
+- **Logging**: Use structured JSON logging with correlation IDs
+- **Infrastructure**: All infrastructure changes via Terraform with peer review
+- **Event Schema**: Follow NHS Notify CloudEvents specification from `nhs-notify-standards` repository
 
 ## Contacts
 
-Provide a way to contact the owners of this project. It can be a team, an individual or information on the means of getting in touch via active communication channels, e.g. opening a GitHub discussion, raising an issue, etc.
+- [Tim Marston](https://github.com/cgitim) - Lead Developer
+- [Mike Wild](https://github.com/mjewildnhs) - Developer
 
 ## Licence
-
-> The [LICENCE.md](./LICENCE.md) file will need to be updated with the correct year and owner
 
 Unless stated otherwise, the codebase is released under the MIT License. This covers both the codebase and any sample code in the documentation.
 

@@ -1,9 +1,12 @@
+ajv
 [A-Z]+s
 Bitwarden
 bot
+[Cc]onfig
 Cognito
 Cyber
 Dependabot
+dev
 draw.io
 drawio
 endcapture
@@ -20,6 +23,7 @@ onboarding
 Podman
 Python
 rawContent
+[Rr]unbook
 sed
 Syft
 Terraform
