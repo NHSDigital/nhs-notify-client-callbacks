@@ -18,18 +18,18 @@ resource "aws_pipes_pipe" "main" {
     }
   }
 
-      target_parameters {
-      eventbridge_event_bus_parameters {
+  target_parameters {
+    eventbridge_event_bus_parameters {
 
-      }
+    }
 
-      input_template = <<EOF
+    input_template = <<EOF
 {
   "dataschemaversion": <$.body.dataschemaversion>,
   "type": <$.body.type>
 }
 EOF
-    }
+  }
 
   depends_on = [aws_iam_role_policy_attachment.main_pipe]
 }

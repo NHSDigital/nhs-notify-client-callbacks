@@ -17,7 +17,7 @@ resource "aws_cloudwatch_event_target" "main" {
   rule           = aws_cloudwatch_event_rule.main.name
   arn            = aws_cloudwatch_event_api_destination.main.arn
   target_id      = "${local.csi}-${var.connection_name}"
-  role_arn = aws_iam_role.api_target_role.arn
+  role_arn       = aws_iam_role.api_target_role.arn
   event_bus_name = var.client_bus_name
 
   dead_letter_config {
