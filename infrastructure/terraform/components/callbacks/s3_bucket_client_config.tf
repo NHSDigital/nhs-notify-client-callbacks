@@ -5,70 +5,40 @@
 # Files are named {clientId}.json and contain ClientSubscriptionConfiguration arrays.
 ##
 
-resource "aws_s3_bucket" "client_config" {
-  bucket        = "${local.csi}-client-config"
-  force_destroy = false
+module "client_config_bucket" {
+  source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.28/terraform-s3bucket.zip"
 
-  tags = merge(
+  name = "client-config"
+
+  aws_account_id = var.aws_account_id
+  component      = var.component
+  environment    = var.environment
+  project        = var.project
+  region         = var.region
+
+  default_tags = merge(
     local.default_tags,
     {
-      Name        = "${local.csi}-client-config"
       Description = "Client subscription configuration storage"
-    },
-  )
-}
-
-resource "aws_s3_bucket_ownership_controls" "client_config" {
-  bucket = aws_s3_bucket.client_config.id
-
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "client_config" {
-  bucket = aws_s3_bucket.client_config.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm     = "aws:kms"
-      kms_master_key_id = module.kms.key_arn
     }
-    bucket_key_enabled = true
-  }
-}
+  )
 
-resource "aws_s3_bucket_versioning" "client_config" {
-  bucket = aws_s3_bucket.client_config.id
+  kms_key_arn        = module.kms.key_arn
+  force_destroy      = false
+  versioning         = true
+  object_ownership   = "BucketOwnerPreferred"
+  bucket_key_enabled = true
 
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "client_config" {
-  depends_on = [
-    aws_s3_bucket_policy.client_config
+  policy_documents = [
+    data.aws_iam_policy_document.client_config_bucket.json
   ]
-
-  bucket = aws_s3_bucket.client_config.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
 }
 
 ##
 # S3 Bucket Policy
 #
-# Allows EventBridge Pipes enrichment Lambda to read configuration files
+# Allows Transform & Filter Lambda to read configuration files
 ##
-
-resource "aws_s3_bucket_policy" "client_config" {
-  bucket = aws_s3_bucket.client_config.id
-  policy = data.aws_iam_policy_document.client_config_bucket.json
-}
 
 data "aws_iam_policy_document" "client_config_bucket" {
   statement {
@@ -77,7 +47,7 @@ data "aws_iam_policy_document" "client_config_bucket" {
 
     principals {
       type        = "AWS"
-      identifiers = [module.client_transform_filter_lambda.lambda_role_arn]
+      identifiers = [module.client_transform_filter_lambda.iam_role_arn]
     }
 
     actions = [
@@ -85,7 +55,7 @@ data "aws_iam_policy_document" "client_config_bucket" {
     ]
 
     resources = [
-      "${aws_s3_bucket.client_config.arn}/*",
+      "${module.client_config_bucket.arn}/*",
     ]
   }
 
@@ -103,8 +73,8 @@ data "aws_iam_policy_document" "client_config_bucket" {
     ]
 
     resources = [
-      aws_s3_bucket.client_config.arn,
-      "${aws_s3_bucket.client_config.arn}/*"
+      module.client_config_bucket.arn,
+      "${module.client_config_bucket.arn}/*"
     ]
 
     condition {
