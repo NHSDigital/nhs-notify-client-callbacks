@@ -2,6 +2,7 @@
  * Channel-specific status change events.
  * Contains fields for callback construction and subscription filtering.
  */
+import type { RoutingPlan } from "models/routing-plan";
 
 export type Channel = "nhsapp" | "email" | "sms" | "letter";
 
@@ -30,7 +31,7 @@ export type SupplierStatus =
   | "unknown";
 
 /**
- * Operational fields (nhsNumber, sendingGroupId, delayedFallback) are NOT included in client callbacks.
+ * Operational fields (nhsNumber, routingPlan) are NOT included in client callbacks.
  */
 export interface ChannelStatusData {
   messageId: string;
@@ -47,9 +48,8 @@ export interface ChannelStatusData {
 
   clientId: string;
   previousChannelStatus?: ChannelStatus;
-  previousSupplierStatus?: string;
+  previousSupplierStatus?: SupplierStatus;
 
   nhsNumber?: string;
-  sendingGroupId?: string;
-  delayedFallback?: boolean;
+  routingPlan: RoutingPlan;
 }

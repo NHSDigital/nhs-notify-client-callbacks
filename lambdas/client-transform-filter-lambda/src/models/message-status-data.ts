@@ -2,6 +2,7 @@
  * Message-level status change events.
  * Contains fields for callback construction and subscription filtering.
  */
+import type { RoutingPlan } from "models/routing-plan";
 
 export type MessageStatus =
   | "created"
@@ -12,11 +13,6 @@ export type MessageStatus =
   | "failed";
 
 export type Channel = "nhsapp" | "email" | "sms" | "letter";
-
-export interface RoutingPlan {
-  id: string;
-  name: string;
-}
 
 /**
  * Operational fields (nhsNumber, sendingGroupId) are NOT included in client callbacks.
@@ -35,7 +31,7 @@ export interface MessageStatusData {
   routingPlan: RoutingPlan;
 
   clientId: string;
+  previousMessageStatus?: MessageStatus;
 
   nhsNumber?: string;
-  sendingGroupId?: string;
 }

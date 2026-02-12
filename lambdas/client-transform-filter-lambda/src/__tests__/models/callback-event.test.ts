@@ -1,4 +1,4 @@
-import { EventTypes } from "models/callback-event";
+import { EventTypes } from "models/status-change-event";
 
 // coverage purposes
 describe("EventTypes", () => {

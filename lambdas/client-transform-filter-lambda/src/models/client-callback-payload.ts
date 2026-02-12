@@ -8,8 +8,8 @@ import type {
   ChannelStatus,
   MessageStatus,
   SupplierStatus,
-} from "models/callback-event";
-import type { RoutingPlan } from "models/message-status-data";
+} from "models/status-change-event";
+import type { RoutingPlan } from "models/routing-plan";
 
 export interface ClientCallbackPayload {
   data: CallbackItem[];

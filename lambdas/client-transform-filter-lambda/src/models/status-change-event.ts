@@ -18,7 +18,7 @@ export interface NotifyMetadata {
   microserviceVersion: string;
 }
 
-export interface CallbackEvent<T = MessageStatusData | ChannelStatusData> {
+export interface StatusChangeEvent<T = MessageStatusData | ChannelStatusData> {
   profileversion: string;
   profilepublished: string;
   specversion: string;
@@ -50,11 +50,7 @@ export const EventTypes = {
 } as const;
 
 export { type MessageStatusData } from "./message-status-data";
-export {
-  type Channel,
-  type RoutingPlan,
-  type MessageStatus,
-} from "models/message-status-data";
+export { type Channel, type MessageStatus } from "models/message-status-data";
 export {
   type ChannelStatus,
   type SupplierStatus,
