@@ -8,7 +8,7 @@
 module "client_config_bucket" {
   source = "https://github.com/NHSDigital/nhs-notify-shared-modules/releases/download/v2.0.28/terraform-s3bucket.zip"
 
-  name = "client-config"
+  name = "subscription-config"
 
   aws_account_id = var.aws_account_id
   component      = var.component
