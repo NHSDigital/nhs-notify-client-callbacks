@@ -55,6 +55,9 @@ const utilsJestConfig = {
     ...(baseJestConfig.coveragePathIgnorePatterns ?? []),
     "zod-validators.ts",
   ],
+
+  // Mirror tsconfig's baseUrl: "src" - automatically resolves non-relative imports
+  modulePaths: ["<rootDir>/src"],
 };
 
 export default utilsJestConfig;
