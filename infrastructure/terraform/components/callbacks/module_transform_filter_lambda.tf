@@ -15,7 +15,7 @@ module "client_transform_filter_lambda" {
   kms_key_arn           = module.kms.key_arn ## Requires shared kms module
 
   iam_policy_document = {
-    body = data.aws_iam_policy_document.example_lambda.json
+    body = data.aws_iam_policy_document.client_transform_filter_lambda.json
   }
 
   function_s3_bucket      = local.acct.s3_buckets["lambda_function_artefacts"]["id"]
@@ -38,7 +38,7 @@ module "client_transform_filter_lambda" {
   }
 }
 
-data "aws_iam_policy_document" "example_lambda" {
+data "aws_iam_policy_document" "client_transform_filter_lambda" {
   statement {
     sid    = "KMSPermissions"
     effect = "Allow"
@@ -50,6 +50,19 @@ data "aws_iam_policy_document" "example_lambda" {
 
     resources = [
       module.kms.key_arn, ## Requires shared kms module
+    ]
+  }
+
+  statement {
+    sid    = "S3ClientConfigReadAccess"
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "${module.client_config_bucket.arn}/*",
     ]
   }
 }
