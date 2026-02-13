@@ -1,8 +1,3 @@
-/**
- * CloudEvents-compliant event structure for callback delivery.
- * Events carry complete payloads to avoid additional lookups.
- */
-
 import type { MessageStatusData } from "models/message-status-data";
 import type { ChannelStatusData } from "models/channel-status-data";
 
@@ -52,9 +47,5 @@ export const EventTypes = {
 } as const;
 
 export { type MessageStatusData } from "./message-status-data";
-export { type Channel, type MessageStatus } from "models/message-status-data";
-export {
-  type ChannelStatus,
-  type SupplierStatus,
-  type ChannelStatusData,
-} from "models/channel-status-data";
+
+export { type ChannelStatusData } from "models/channel-status-data";

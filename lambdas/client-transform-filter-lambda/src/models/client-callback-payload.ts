@@ -2,13 +2,18 @@
  * Message/Channel Status Callback payload delivered to client webhooks.
  */
 
+import type { RoutingPlan } from "models/routing-plan";
+import type { Channel } from "models/channel-types";
 import type {
-  Channel,
   ChannelStatus,
   MessageStatus,
   SupplierStatus,
-} from "models/status-transition-event";
-import type { RoutingPlan } from "models/routing-plan";
+} from "models/status-types";
+
+export type ClientChannel = Lowercase<Channel>;
+export type ClientMessageStatus = Lowercase<MessageStatus>;
+export type ClientChannelStatus = Lowercase<ChannelStatus>;
+export type ClientSupplierStatus = Lowercase<SupplierStatus>;
 
 export interface ClientCallbackPayload {
   data: CallbackItem[];
@@ -28,12 +33,12 @@ export interface CallbackItem {
 export interface MessageStatusAttributes {
   messageId: string;
   messageReference: string;
-  messageStatus: MessageStatus;
+  messageStatus: ClientMessageStatus;
   messageStatusDescription?: string;
   messageFailureReasonCode?: string;
   channels: {
-    type: Channel;
-    channelStatus: "delivered" | "failed";
+    type: ClientChannel;
+    channelStatus: ClientChannelStatus;
   }[];
   timestamp: string;
   routingPlan: RoutingPlan;
@@ -44,11 +49,11 @@ export interface ChannelStatusAttributes {
   messageReference: string;
   cascadeType: "primary" | "secondary";
   cascadeOrder: number;
-  channel: Channel;
-  channelStatus: ChannelStatus;
+  channel: ClientChannel;
+  channelStatus: ClientChannelStatus;
   channelStatusDescription?: string;
   channelFailureReasonCode?: string;
-  supplierStatus: SupplierStatus;
+  supplierStatus: ClientSupplierStatus;
   timestamp: string;
   retryCount: number;
 }

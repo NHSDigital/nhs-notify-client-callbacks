@@ -2,16 +2,8 @@
  * Message-level status transition event data.
  */
 import type { RoutingPlan } from "models/routing-plan";
-
-export type MessageStatus =
-  | "created"
-  | "pending_enrichment"
-  | "enriched"
-  | "sending"
-  | "delivered"
-  | "failed";
-
-export type Channel = "nhsapp" | "email" | "sms" | "letter";
+import type { Channel } from "models/channel-types";
+import type { MessageStatus } from "models/status-types";
 
 export interface MessageStatusData {
   messageId: string;
