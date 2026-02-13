@@ -2,7 +2,7 @@ import type { MessageStatusData } from "models/message-status-data";
 import type { ChannelStatusData } from "models/channel-status-data";
 
 export interface NotifyMetadata {
-  teamResponsible: "Team 1" | "Team 2" | "Team 3";
+  teamResponsible: "Team 1" | "Team 2" | "Team 3" | "Team 4";
   notifyDomain: "Ordering" | "Delivering" | "Reporting" | "Enquiries";
   microservice: string;
   repositoryUrl: string;
