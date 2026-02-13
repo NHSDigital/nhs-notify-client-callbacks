@@ -1,6 +1,5 @@
 /**
- * JSON:API-compliant callback payload delivered to client webhooks.
- * Operational fields are excluded from all callback payloads.
+ * Message/Channel Status Callback payload delivered to client webhooks.
  */
 
 import type {
@@ -8,7 +7,7 @@ import type {
   ChannelStatus,
   MessageStatus,
   SupplierStatus,
-} from "models/status-change-event";
+} from "models/status-transition-event";
 import type { RoutingPlan } from "models/routing-plan";
 
 export interface ClientCallbackPayload {

@@ -18,7 +18,9 @@ export interface NotifyMetadata {
   microserviceVersion: string;
 }
 
-export interface StatusChangeEvent<T = MessageStatusData | ChannelStatusData> {
+export interface StatusTransitionEvent<
+  T = MessageStatusData | ChannelStatusData,
+> {
   profileversion: string;
   profilepublished: string;
   specversion: string;
